@@ -5,6 +5,7 @@ package gr.perisnik.cj.swing_schoolapp_maven.model;
  * This class provides methods to get and set these properties.
  * 
  * @author Peris Nik
+ * @version 0.1
  */
 public class User {
     private int id;
