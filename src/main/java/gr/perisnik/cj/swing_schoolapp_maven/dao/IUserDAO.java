@@ -22,7 +22,7 @@ public interface IUserDAO {
      * @param user the user to be added
      * @throws UserDAOException if an error occurs while adding the user
      */
-    void addUser(User user) throws UserDAOException;
+    User addUser(User user) throws UserDAOException;
 
     /**
      * Updates the details of an existing user in the data source.
@@ -30,7 +30,7 @@ public interface IUserDAO {
      * @param user the user with updated details
      * @throws UserDAOException if an error occurs while updating the user
      */
-    void updateUser(User user) throws UserDAOException;
+    User updateUser(User user) throws UserDAOException;
 
     /**
      * Deletes a user from the data source based on the user's ID.

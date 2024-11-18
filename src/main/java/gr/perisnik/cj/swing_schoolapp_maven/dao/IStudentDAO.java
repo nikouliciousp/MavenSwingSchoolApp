@@ -22,7 +22,7 @@ public interface IStudentDAO {
      * @param student the student to be added
      * @throws StudentDAOException if an error occurs while adding the student
      */
-    void addStudent(Student student) throws StudentDAOException;
+    Student addStudent(Student student) throws StudentDAOException;
 
     /**
      * Updates the details of an existing student in the data source.
@@ -30,7 +30,7 @@ public interface IStudentDAO {
      * @param student the student with updated details
      * @throws StudentDAOException if an error occurs while updating the student
      */
-    void updateStudent(Student student) throws StudentDAOException;
+    Student updateStudent(Student student) throws StudentDAOException;
 
     /**
      * Deletes a student from the data source based on the student's ID.

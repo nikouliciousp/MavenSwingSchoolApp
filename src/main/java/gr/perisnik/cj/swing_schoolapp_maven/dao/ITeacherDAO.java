@@ -22,7 +22,7 @@ public interface ITeacherDAO {
      * @param teacher the teacher to be added
      * @throws TeacherDAOException if an error occurs while adding the teacher
      */
-    void addTeacher(Teacher teacher) throws TeacherDAOException;
+    Teacher addTeacher(Teacher teacher) throws TeacherDAOException;
 
     /**
      * Updates the details of an existing teacher in the data source.
@@ -30,7 +30,7 @@ public interface ITeacherDAO {
      * @param teacher the teacher with updated details
      * @throws TeacherDAOException if an error occurs while updating the teacher
      */
-    void updateTeacher(Teacher teacher) throws TeacherDAOException;
+    Teacher updateTeacher(Teacher teacher) throws TeacherDAOException;
 
     /**
      * Deletes a teacher from the data source based on the teacher's ID.

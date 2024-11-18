@@ -2,7 +2,6 @@ package gr.perisnik.cj.swing_schoolapp_maven.service.util;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-
 import org.apache.commons.dbcp2.BasicDataSource;
 
 /**
@@ -24,13 +23,28 @@ public class DBUtil {
     private DBUtil() {}
     
     static {
+        // Set the database URL, including the hostname, port, database name, and time zone.
         ds.setUrl("jdbc:mysql://localhost:3306/studentsdbcj?serverTimeZone=UTC");
+        
+        // Set the username for the database connection.
         ds.setUsername("sttdbcj");
+        
+        // Set the password for the database connection.
         ds.setPassword("perisnik123");
+        
+        // Set the initial size of the connection pool.
         ds.setInitialSize(8);
+        
+        // Set the maximum total number of connections allowed in the pool.
         ds.setMaxTotal(32);
+        
+        // Set the minimum number of idle connections that should be maintained in the pool.
         ds.setMinIdle(8);
+        
+        // Set the maximum number of idle connections that can be maintained in the pool.
         ds.setMaxIdle(10);
+        
+        // Set the maximum number of open prepared statements that can be used simultaneously.
         ds.setMaxOpenPreparedStatements(100);
     }
     
@@ -47,7 +61,6 @@ public class DBUtil {
             e.addSuppressed(null);
             throw e;
         }
-        
         return conn;
     }
     
