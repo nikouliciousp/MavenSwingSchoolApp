@@ -38,6 +38,7 @@ public class UserDAOImpl implements IUserDAO {
 	        
 	        return user;
 	    } catch (SQLException e) {
+	    	e.printStackTrace();
 	        throw new UserDAOException("Error adding user: " + e.getMessage());
 	    }
 	}
@@ -60,6 +61,7 @@ public class UserDAOImpl implements IUserDAO {
 	        
 	        return user;
 	    } catch (SQLException e) {
+	    	e.printStackTrace();
 	        throw new UserDAOException("Error updating user: " + e.getMessage());
 	    }
 	}
@@ -72,6 +74,7 @@ public class UserDAOImpl implements IUserDAO {
             pstmt.setInt(1, userId);
             pstmt.executeUpdate();
         } catch (SQLException e) {
+        	e.printStackTrace();
             throw new UserDAOException("Error deleting user: " + e.getMessage());
         }
     }
@@ -90,6 +93,7 @@ public class UserDAOImpl implements IUserDAO {
                 }
             }
         } catch (SQLException e) {
+        	e.printStackTrace();
             throw new UserDAOException("Error retrieving user by ID: " + e.getMessage());
         }
     }
@@ -108,6 +112,7 @@ public class UserDAOImpl implements IUserDAO {
                 }
             }
         } catch (SQLException e) {
+        	e.printStackTrace();
             throw new UserDAOException("Error retrieving user by username: " + e.getMessage());
         }
     }
@@ -123,6 +128,7 @@ public class UserDAOImpl implements IUserDAO {
                 users.add(new User(rs.getInt("id"), rs.getString("username"), rs.getString("password")));
             }
         } catch (SQLException e) {
+        	e.printStackTrace();
             throw new UserDAOException("Error retrieving all users: " + e.getMessage());
         }
         return users;

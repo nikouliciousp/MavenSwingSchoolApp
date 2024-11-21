@@ -8,6 +8,7 @@ import gr.perisnik.cj.swing_schoolapp_maven.dao.UserDAOImpl;
 import gr.perisnik.cj.swing_schoolapp_maven.dao.exceptions.UserDAOException;
 import gr.perisnik.cj.swing_schoolapp_maven.dto.UserDTO;
 import gr.perisnik.cj.swing_schoolapp_maven.model.User;
+import gr.perisnik.cj.swing_schoolapp_maven.service.exceptions.UserNotFoundException;
 
 /**
  * Implementation of the IUserService interface for managing user operations.
@@ -20,56 +21,101 @@ public class UserServiceImpl implements IUserService {
     
     private IUserDAO userDAO = new UserDAOImpl();
     
-    /**
-     * Adds a new user.
-     * 
-     * @param userDTO the user data transfer object
-     * @return the added user
-     * @throws UserDAOException if an error occurs while adding the user
-     */
+    public UserServiceImpl(IUserDAO userDAO) {
+        super();
+        this.userDAO = userDAO;
+    }
+    
     @Override
     public UserDTO addUser(UserDTO userDTO) throws UserDAOException {
-        User user = new User(userDTO.getId(), userDTO.getUsername(), userDTO.getPassword());
-        user = userDAO.addUser(user);
-        return new UserDTO(user.getId(), user.getUsername(), user.getPassword());
-    }
-    
-    /**
-     * Updates an existing user.
-     * 
-     * @param userDTO the user data transfer object
-     * @return the updated user
-     * @throws UserDAOException if an error occurs while updating the user
-     */
-    @Override
-    public UserDTO updateUser(UserDTO userDTO) throws UserDAOException {
-        User user = new User(userDTO.getId(), userDTO.getUsername(), userDTO.getPassword());
-        user = userDAO.updateUser(user);
-        return new UserDTO(user.getId(), user.getUsername(), user.getPassword());
+        if (userDTO == null) {
+            return null;
+        }
+        
+        try {
+            User user = new User(userDTO.getId(), userDTO.getUsername(), userDTO.getPassword());
+            user = userDAO.addUser(user);
+            return new UserDTO(user.getId(), user.getUsername(), user.getPassword());
+        } catch (UserDAOException e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
     
     @Override
-    public void deleteUser(int userId) throws UserDAOException {
-        userDAO.deleteUser(userId);
+    public UserDTO updateUser(UserDTO userDTO) throws UserDAOException, UserNotFoundException {
+        if (userDTO == null) {
+            return null;
+        }
+        
+        try {
+            if (userDAO.getUserById(userDTO.getId()) == null) {
+                throw new UserNotFoundException("User with ID " + userDTO.getId() + " not found");
+            }
+            User user = new User(userDTO.getId(), userDTO.getUsername(), userDTO.getPassword());
+            user = userDAO.updateUser(user);
+            return new UserDTO(user.getId(), user.getUsername(), user.getPassword());
+        } catch (UserDAOException e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
     
     @Override
-    public UserDTO getUserById(int userId) throws UserDAOException {
-        User user = userDAO.getUserById(userId);
-        return new UserDTO(user.getId(), user.getUsername(), user.getPassword());
+    public void deleteUser(int userId) throws UserDAOException, UserNotFoundException {
+        try {
+            if (userDAO.getUserById(userId) == null) {
+                throw new UserNotFoundException("User with ID " + userId + " not found");
+            }
+            userDAO.deleteUser(userId);
+        } catch (UserDAOException e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
     
     @Override
-    public UserDTO getUserByUsername(String username) throws UserDAOException {
-        User user = userDAO.getUserByUsername(username);
-        return new UserDTO(user.getId(), user.getUsername(), user.getPassword());
+    public UserDTO getUserById(int userId) throws UserDAOException, UserNotFoundException {
+        try {
+            User user = userDAO.getUserById(userId);
+            if (user == null) {
+                throw new UserNotFoundException("User with ID " + userId + " not found");
+            }
+            return new UserDTO(user.getId(), user.getUsername(), user.getPassword());
+        } catch (UserDAOException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+    
+    @Override
+    public UserDTO getUserByUsername(String username) throws UserDAOException, UserNotFoundException {
+        if (username == null || username.trim().isEmpty()) {
+            return null;
+        }
+        
+        try {
+            User user = userDAO.getUserByUsername(username);
+            if (user == null) {
+                throw new UserNotFoundException("User with username " + username + " not found");
+            }
+            return new UserDTO(user.getId(), user.getUsername(), user.getPassword());
+        } catch (UserDAOException e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
     
     @Override
     public List<UserDTO> getAllUsers() throws UserDAOException {
-        List<User> users = userDAO.getAllUsers();
-        return users.stream()
-            .map(user -> new UserDTO(user.getId(), user.getUsername(), user.getPassword()))
-            .collect(Collectors.toList());
+        try {
+            List<User> users = userDAO.getAllUsers();
+            return users.stream()
+                .map(user -> new UserDTO(user.getId(), user.getUsername(), user.getPassword()))
+                .collect(Collectors.toList());
+        } catch (UserDAOException e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 }

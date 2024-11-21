@@ -38,6 +38,7 @@ public class StudentDAOImpl implements IStudentDAO {
 	        
 	        return student;
 	    } catch (SQLException e) {
+	    	e.printStackTrace();
 	        throw new StudentDAOException("Error adding student: " + e.getMessage());
 	    }
 	}
@@ -60,6 +61,7 @@ public class StudentDAOImpl implements IStudentDAO {
 	        
 	        return student;
 	    } catch (SQLException e) {
+	    	e.printStackTrace();
 	        throw new StudentDAOException("Error updating student: " + e.getMessage());
 	    }
 	}
@@ -72,6 +74,7 @@ public class StudentDAOImpl implements IStudentDAO {
             pstmt.setInt(1, studentId);
             pstmt.executeUpdate();
         } catch (SQLException e) {
+        	e.printStackTrace();
             throw new StudentDAOException("Error deleting student: " + e.getMessage());
         }
     }
@@ -90,23 +93,25 @@ public class StudentDAOImpl implements IStudentDAO {
                 }
             }
         } catch (SQLException e) {
+        	e.printStackTrace();
             throw new StudentDAOException("Error retrieving student by ID: " + e.getMessage());
         }
     }
 
     @Override
     public List<Student> getStudentByLastname(String lastname) throws StudentDAOException {
-        String sql = "SELECT * FROM students WHERE lastname = ?";
+        String sql = "SELECT * FROM students WHERE lastname LIKE ?";
         List<Student> students = new ArrayList<>();
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, lastname);
+            pstmt.setString(1, lastname + '%');
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     students.add(new Student(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname")));
                 }
             }
         } catch (SQLException e) {
+        	e.printStackTrace();
             throw new StudentDAOException("Error retrieving students by lastname: " + e.getMessage());
         }
         return students;
@@ -123,6 +128,7 @@ public class StudentDAOImpl implements IStudentDAO {
                 students.add(new Student(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname")));
             }
         } catch (SQLException e) {
+        	e.printStackTrace();
             throw new StudentDAOException("Error retrieving all students: " + e.getMessage());
         }
         return students;

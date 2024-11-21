@@ -38,6 +38,7 @@ public class TeacherDAOImpl implements ITeacherDAO {
             
             return teacher;
         } catch (SQLException e) {
+        	e.printStackTrace();
             throw new TeacherDAOException("Error adding teacher: " + e.getMessage());
         }
     }
@@ -60,6 +61,7 @@ public class TeacherDAOImpl implements ITeacherDAO {
             
             return teacher;
         } catch (SQLException e) {
+        	e.printStackTrace();
             throw new TeacherDAOException("Error updating teacher: " + e.getMessage());
         }
     }
@@ -72,6 +74,7 @@ public class TeacherDAOImpl implements ITeacherDAO {
             pstmt.setInt(1, teacherId);
             pstmt.executeUpdate();
         } catch (SQLException e) {
+        	e.printStackTrace();
             throw new TeacherDAOException("Error deleting teacher: " + e.getMessage());
         }
     }
@@ -90,23 +93,25 @@ public class TeacherDAOImpl implements ITeacherDAO {
                 }
             }
         } catch (SQLException e) {
+        	e.printStackTrace();
             throw new TeacherDAOException("Error retrieving teacher by ID: " + e.getMessage());
         }
     }
 
     @Override
     public List<Teacher> getTeacherByLastname(String lastname) throws TeacherDAOException {
-        String sql = "SELECT * FROM teachers WHERE lastname = ?";
+        String sql = "SELECT * FROM teachers WHERE lastname LIKE ?";
         List<Teacher> teachers = new ArrayList<>();
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, lastname);
+            pstmt.setString(1, lastname + '%');
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     teachers.add(new Teacher(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname")));
                 }
             }
         } catch (SQLException e) {
+        	e.printStackTrace();
             throw new TeacherDAOException("Error retrieving teachers by lastname: " + e.getMessage());
         }
         return teachers;
@@ -123,6 +128,7 @@ public class TeacherDAOImpl implements ITeacherDAO {
                 teachers.add(new Teacher(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname")));
             }
         } catch (SQLException e) {
+        	e.printStackTrace();
             throw new TeacherDAOException("Error retrieving all teachers: " + e.getMessage());
         }
         return teachers;
